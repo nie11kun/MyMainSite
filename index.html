@@ -15,9 +15,9 @@
         <div class="row">
             <div class="ct col-lg-6 col-12">
                 <div class="head">
-                    <p class="font-weight-bold title-large d-none d-md-block">marco nie</p>
-                    <p class="text-monospace subtitle-large d-none d-md-block">I’m dancing at the feet of my lord...</p>
-
+                    <p class="font-weight-bold title-large d-none d-md-block ml9">
+                        <span class="letters">marco nie</span>
+                    </p>
                     <p class="font-weight-bold title-small d-block d-md-none">marco nie</p>
                     <p class="text-monospace subtitle-small d-block d-md-none">I’m dancing at the feet of my lord...</p>
                 </div>
@@ -49,5 +49,20 @@
 
     </footer>
 </body>
+<script src="anime.min.js"></script>
+<script>
+    // Wrap every letter in a span
+    var textWrapper = document.querySelector('.ml9 .letters');
+    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+    anime.timeline({ loop: false })
+        .add({
+            targets: '.ml9 .letter',
+            scale: [0, 1],
+            duration: 1500,
+            elasticity: 600,
+            delay: (el, i) => 45 * (i + 1)
+        });
+</script>
 
 </html>
