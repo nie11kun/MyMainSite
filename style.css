@@ -37,6 +37,9 @@ body {
   justify-content: center;
   overflow: hidden;
   position: relative;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ===== Mouse Glow ===== */
@@ -58,7 +61,8 @@ body {
   opacity: 0;
 }
 
-body:hover .glow {
+body:hover .glow,
+.glow.active {
   opacity: 1;
 }
 
