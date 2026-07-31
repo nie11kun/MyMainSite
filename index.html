@@ -8,9 +8,7 @@
     <meta name="description" content="Marco Nie — 个人主页。博客、代码、简历与更多。">
     <meta name="theme-color" content="#0a0a0b">
     <link rel="icon" type="image/png" href="favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.cn">
-    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
-    <link href="https://fonts.googleapis.cn/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -62,21 +60,63 @@
             }
         })();
 
-        // Mouse-tracking glow
+        // Interactive Effects (Glow + Mobile Touch Hover)
         (function () {
             const glow = document.getElementById('glow');
+            const navLinks = document.querySelectorAll('nav a');
             let ticking = false;
+            let currentActiveLink = null;
 
-            document.addEventListener('mousemove', function (e) {
+            function updateEffects(x, y) {
                 if (!ticking) {
                     requestAnimationFrame(function () {
-                        glow.style.left = e.clientX + 'px';
-                        glow.style.top = e.clientY + 'px';
+                        // 1. Update glow position
+                        glow.style.left = x + 'px';
+                        glow.style.top = y + 'px';
+
+                        // 2. Update touch hover state (only relevant for touch)
+                        const element = document.elementFromPoint(x, y);
+                        const targetLink = element ? element.closest('nav a') : null;
+
+                        if (currentActiveLink !== targetLink) {
+                            if (currentActiveLink) currentActiveLink.classList.remove('touch-active');
+                            if (targetLink) targetLink.classList.add('touch-active');
+                            currentActiveLink = targetLink;
+                        }
+                        
                         ticking = false;
                     });
                     ticking = true;
                 }
+            }
+
+            function clearTouchActive() {
+                if (currentActiveLink) {
+                    currentActiveLink.classList.remove('touch-active');
+                    currentActiveLink = null;
+                }
+            }
+
+            // Mouse events
+            document.addEventListener('mousemove', function (e) {
+                updateEffects(e.clientX, e.clientY);
             });
+
+            // Touch events
+            document.addEventListener('touchstart', function (e) {
+                if (e.touches.length > 0) {
+                    updateEffects(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchmove', function (e) {
+                if (e.touches.length > 0) {
+                    updateEffects(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', clearTouchActive, { passive: true });
+            document.addEventListener('touchcancel', clearTouchActive, { passive: true });
         })();
     </script>
 </body>
