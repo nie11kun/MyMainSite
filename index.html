@@ -93,9 +93,11 @@
                 if (currentActiveLink !== link) {
                     if (currentActiveLink) {
                         currentActiveLink.style.color = '';
+                        currentActiveLink.classList.remove('touch-active');
                     }
                     if (link) {
-                        link.style.color = '#64d8cb';
+                        link.style.color = '#e8e8ec';
+                        link.classList.add('touch-active');
                     }
                     currentActiveLink = link;
                 }
