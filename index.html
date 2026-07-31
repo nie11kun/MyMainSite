@@ -15,8 +15,6 @@
 <body>
     <!-- Mouse tracking glow -->
     <div class="glow" id="glow" aria-hidden="true"></div>
-    <!-- DEBUG: visible dot to confirm touch events are firing -->
-    <div id="debug-dot" style="position:fixed;width:20px;height:20px;background:red;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);display:none;"></div>
 
     <main>
         <h1 class="name" id="name" aria-label="marco nie">marco nie</h1>
@@ -64,26 +62,20 @@
 
         // Interactive Effects (Glow + Touch Hover)
         (function () {
-            const glow = document.getElementById('glow');
-            const debugDot = document.getElementById('debug-dot');
-            const navLinks = document.querySelectorAll('nav a');
-            let currentActiveLink = null;
-            let touchStartPos = null;
-            let hasMoved = false;
+            var glow = document.getElementById('glow');
+            var navLinks = document.querySelectorAll('nav a');
+            var currentActiveLink = null;
+            var touchStartPos = null;
+            var hasMoved = false;
 
             function showGlow(x, y) {
                 glow.style.left = x + 'px';
                 glow.style.top = y + 'px';
                 glow.style.opacity = '1';
-                // DEBUG
-                debugDot.style.left = x + 'px';
-                debugDot.style.top = y + 'px';
-                debugDot.style.display = 'block';
             }
 
             function hideGlow() {
                 glow.style.opacity = '0';
-                debugDot.style.display = 'none';
             }
 
             function findLinkAt(x, y) {
@@ -101,14 +93,9 @@
                 if (currentActiveLink !== link) {
                     if (currentActiveLink) {
                         currentActiveLink.style.color = '';
-                        currentActiveLink.classList.remove('touch-active');
                     }
                     if (link) {
                         link.style.color = '#64d8cb';
-                        link.classList.add('touch-active');
-                        debugDot.style.background = 'lime';
-                    } else {
-                        debugDot.style.background = 'red';
                     }
                     currentActiveLink = link;
                 }
@@ -121,9 +108,8 @@
             document.addEventListener('mouseleave', hideGlow);
 
             // ---- Touch (iOS Safari) ----
-            // CRITICAL: passive:false + preventDefault() on touchstart
-            // This is the ONLY way to prevent iOS Safari from stealing the gesture.
-            // Without this, iOS Safari won't send touchmove events at all.
+            // passive:false + preventDefault() on touchstart is required
+            // to prevent iOS Safari from stealing the gesture
             document.addEventListener('touchstart', function (e) {
                 e.preventDefault();
                 if (e.touches.length > 0) {
@@ -146,7 +132,7 @@
             }, { passive: false });
 
             document.addEventListener('touchend', function (e) {
-                // Detect tap: if finger didn't move much, treat as a click
+                // Detect tap: if finger barely moved, treat as a click
                 if (touchStartPos && !hasMoved && e.changedTouches.length > 0) {
                     var t = e.changedTouches[0];
                     var dx = Math.abs(t.clientX - touchStartPos.x);
