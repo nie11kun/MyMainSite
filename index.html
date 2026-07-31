@@ -99,8 +99,17 @@
 
             function setActiveLink(link) {
                 if (currentActiveLink !== link) {
-                    if (currentActiveLink) currentActiveLink.classList.remove('touch-active');
-                    if (link) link.classList.add('touch-active');
+                    if (currentActiveLink) {
+                        currentActiveLink.style.color = '';
+                        currentActiveLink.classList.remove('touch-active');
+                    }
+                    if (link) {
+                        link.style.color = '#64d8cb';
+                        link.classList.add('touch-active');
+                        debugDot.style.background = 'lime';
+                    } else {
+                        debugDot.style.background = 'red';
+                    }
                     currentActiveLink = link;
                 }
             }
