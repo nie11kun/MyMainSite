@@ -189,11 +189,13 @@ nav a {
 nav a .underline {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  width: 0;
+  left: 0;
+  width: 100%;
   height: 2px;
   background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-  transition: width var(--transition-fast), left var(--transition-fast);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--transition-fast);
 }
 
 nav a:hover, nav a:active, nav a.touch-active {
@@ -201,8 +203,7 @@ nav a:hover, nav a:active, nav a.touch-active {
 }
 
 nav a:hover .underline, nav a:active .underline, nav a.touch-active .underline {
-  width: 100%;
-  left: 0;
+  transform: scaleX(1);
 }
 
 /* ===== Footer ===== */

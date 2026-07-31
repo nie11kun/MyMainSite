@@ -95,16 +95,14 @@
                         currentActiveLink.style.color = '';
                         var underline = currentActiveLink.querySelector('.underline');
                         if (underline) {
-                            underline.style.width = '0';
-                            underline.style.left = '50%';
+                            underline.style.transform = 'scaleX(0)';
                         }
                     }
                     if (link) {
                         link.style.color = '#e8e8ec';
                         var underline = link.querySelector('.underline');
                         if (underline) {
-                            underline.style.width = '100%';
-                            underline.style.left = '0';
+                            underline.style.transform = 'scaleX(1)';
                         }
                     }
                     currentActiveLink = link;
