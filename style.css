@@ -190,20 +190,17 @@ nav a::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 1px;
+  left: var(--line-left, 50%);
+  width: var(--line-width, 0);
+  height: 2px; /* Increased from 1px for better mobile visibility */
   background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
   transition: width var(--transition-fast), left var(--transition-fast);
 }
 
-nav a:hover, nav a:active, nav a.touch-active {
+nav a:hover, nav a:active {
   color: var(--text-primary);
-}
-
-nav a:hover::after, nav a:active::after, nav a.touch-active::after {
-  width: 100%;
-  left: 0;
+  --line-width: 100%;
+  --line-left: 0;
 }
 
 /* ===== Footer ===== */

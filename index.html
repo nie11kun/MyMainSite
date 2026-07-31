@@ -93,11 +93,13 @@
                 if (currentActiveLink !== link) {
                     if (currentActiveLink) {
                         currentActiveLink.style.color = '';
-                        currentActiveLink.classList.remove('touch-active');
+                        currentActiveLink.style.setProperty('--line-width', '0');
+                        currentActiveLink.style.setProperty('--line-left', '50%');
                     }
                     if (link) {
                         link.style.color = '#e8e8ec';
-                        link.classList.add('touch-active');
+                        link.style.setProperty('--line-width', '100%');
+                        link.style.setProperty('--line-left', '0');
                     }
                     currentActiveLink = link;
                 }
