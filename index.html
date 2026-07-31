@@ -60,87 +60,99 @@
             }
         })();
 
-        // Interactive Effects (Glow + Mobile Touch Hover)
+        // Interactive Effects (Glow + Touch Hover)
         (function () {
             const glow = document.getElementById('glow');
             const navLinks = document.querySelectorAll('nav a');
-            let ticking = false;
             let currentActiveLink = null;
+            let touchStartPos = null;
+            let hasMoved = false;
 
-            function updateEffects(x, y) {
-                if (!ticking) {
-                    requestAnimationFrame(function () {
-                        // Make glow visible on touch/hover
-                        glow.classList.add('active');
+            function showGlow(x, y) {
+                glow.style.left = x + 'px';
+                glow.style.top = y + 'px';
+                glow.style.opacity = '1';
+            }
 
-                        // 1. Update glow position
-                        glow.style.left = x + 'px';
-                        glow.style.top = y + 'px';
+            function hideGlow() {
+                glow.style.opacity = '0';
+            }
 
-                        // 2. Proximity-based detection for links (iOS Safari compatible)
-                        let targetLink = null;
-                        for (let i = 0; i < navLinks.length; i++) {
-                            const rect = navLinks[i].getBoundingClientRect();
-                            if (
-                                x >= rect.left - 40 &&
-                                x <= rect.right + 40 &&
-                                y >= rect.top - 8 &&
-                                y <= rect.bottom + 8
-                            ) {
-                                targetLink = navLinks[i];
-                                break;
-                            }
-                        }
+            function findLinkAt(x, y) {
+                for (var i = 0; i < navLinks.length; i++) {
+                    var rect = navLinks[i].getBoundingClientRect();
+                    if (x >= rect.left - 20 && x <= rect.right + 20 &&
+                        y >= rect.top - 10 && y <= rect.bottom + 10) {
+                        return navLinks[i];
+                    }
+                }
+                return null;
+            }
 
-                        if (currentActiveLink !== targetLink) {
-                            if (currentActiveLink) currentActiveLink.classList.remove('touch-active');
-                            if (targetLink) targetLink.classList.add('touch-active');
-                            currentActiveLink = targetLink;
-                        }
-                        
-                        ticking = false;
-                    });
-                    ticking = true;
+            function setActiveLink(link) {
+                if (currentActiveLink !== link) {
+                    if (currentActiveLink) currentActiveLink.classList.remove('touch-active');
+                    if (link) link.classList.add('touch-active');
+                    currentActiveLink = link;
                 }
             }
 
-            function clearTouchActive() {
-                glow.classList.remove('active');
-                if (currentActiveLink) {
-                    currentActiveLink.classList.remove('touch-active');
-                    currentActiveLink = null;
-                }
-            }
-
-            // Mouse events
+            // ---- Mouse (desktop) ----
             document.addEventListener('mousemove', function (e) {
-                updateEffects(e.clientX, e.clientY);
+                showGlow(e.clientX, e.clientY);
             });
+            document.addEventListener('mouseleave', hideGlow);
 
-            document.addEventListener('mouseleave', function () {
-                glow.classList.remove('active');
-            });
-
-            // Touch events (iOS Safari compatible)
-            function handleTouch(e) {
-                if (e.touches.length > 0) {
-                    updateEffects(e.touches[0].clientX, e.touches[0].clientY);
-                }
-            }
-
+            // ---- Touch (iOS Safari) ----
+            // CRITICAL: passive:false + preventDefault() on touchstart
+            // This is the ONLY way to prevent iOS Safari from stealing the gesture.
+            // Without this, iOS Safari won't send touchmove events at all.
             document.addEventListener('touchstart', function (e) {
-                handleTouch(e);
-            }, { passive: true });
-
-            document.addEventListener('touchmove', function (e) {
-                handleTouch(e);
-                if (e.cancelable) {
-                    e.preventDefault();
+                e.preventDefault();
+                if (e.touches.length > 0) {
+                    var t = e.touches[0];
+                    touchStartPos = { x: t.clientX, y: t.clientY };
+                    hasMoved = false;
+                    showGlow(t.clientX, t.clientY);
+                    setActiveLink(findLinkAt(t.clientX, t.clientY));
                 }
             }, { passive: false });
 
-            document.addEventListener('touchend', clearTouchActive, { passive: true });
-            document.addEventListener('touchcancel', clearTouchActive, { passive: true });
+            document.addEventListener('touchmove', function (e) {
+                e.preventDefault();
+                if (e.touches.length > 0) {
+                    var t = e.touches[0];
+                    hasMoved = true;
+                    showGlow(t.clientX, t.clientY);
+                    setActiveLink(findLinkAt(t.clientX, t.clientY));
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', function (e) {
+                // Detect tap: if finger didn't move much, treat as a click
+                if (touchStartPos && !hasMoved && e.changedTouches.length > 0) {
+                    var t = e.changedTouches[0];
+                    var dx = Math.abs(t.clientX - touchStartPos.x);
+                    var dy = Math.abs(t.clientY - touchStartPos.y);
+                    if (dx < 10 && dy < 10) {
+                        var link = findLinkAt(t.clientX, t.clientY);
+                        if (link) {
+                            window.location.href = link.href;
+                        }
+                    }
+                }
+                touchStartPos = null;
+                hasMoved = false;
+                setActiveLink(null);
+                hideGlow();
+            }, { passive: true });
+
+            document.addEventListener('touchcancel', function () {
+                touchStartPos = null;
+                hasMoved = false;
+                setActiveLink(null);
+                hideGlow();
+            }, { passive: true });
         })();
     </script>
 </body>
