@@ -70,16 +70,27 @@
             function updateEffects(x, y) {
                 if (!ticking) {
                     requestAnimationFrame(function () {
-                        // Make glow visible on touch
+                        // Make glow visible on touch/hover
                         glow.classList.add('active');
 
                         // 1. Update glow position
                         glow.style.left = x + 'px';
                         glow.style.top = y + 'px';
 
-                        // 2. Update touch hover state (only relevant for touch)
-                        const element = document.elementFromPoint(x, y);
-                        const targetLink = element ? element.closest('nav a') : null;
+                        // 2. Proximity-based detection for links (iOS Safari compatible)
+                        let targetLink = null;
+                        for (let i = 0; i < navLinks.length; i++) {
+                            const rect = navLinks[i].getBoundingClientRect();
+                            if (
+                                x >= rect.left - 40 &&
+                                x <= rect.right + 40 &&
+                                y >= rect.top - 8 &&
+                                y <= rect.bottom + 8
+                            ) {
+                                targetLink = navLinks[i];
+                                break;
+                            }
+                        }
 
                         if (currentActiveLink !== targetLink) {
                             if (currentActiveLink) currentActiveLink.classList.remove('touch-active');
@@ -106,6 +117,10 @@
                 updateEffects(e.clientX, e.clientY);
             });
 
+            document.addEventListener('mouseleave', function () {
+                glow.classList.remove('active');
+            });
+
             // Touch events (iOS Safari compatible)
             function handleTouch(e) {
                 if (e.touches.length > 0) {
@@ -113,10 +128,12 @@
                 }
             }
 
-            document.addEventListener('touchstart', handleTouch, { passive: true });
+            document.addEventListener('touchstart', function (e) {
+                handleTouch(e);
+            }, { passive: true });
+
             document.addEventListener('touchmove', function (e) {
                 handleTouch(e);
-                // Prevent iOS Safari from interpreting touch drags as page scroll/rubberband
                 if (e.cancelable) {
                     e.preventDefault();
                 }
