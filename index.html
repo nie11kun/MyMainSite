@@ -22,12 +22,12 @@
         <hr class="divider">
         <nav aria-label="主导航">
             <ul>
-                <li><a href="https://blog.niekun.net/">我的博客</a></li>
-                <li><a href="https://niekun.net/resume">我的简历</a></li>
-                <li><a href="https://github.com/nie11kun">我的代码</a></li>
-                <li><a href="https://niekun.net/cloud/">我的云盘</a></li>
-                <li><a href="https://open.spotify.com/playlist/37i9dQZF1EtoJ3aX8fNvC0?si=oWVOxAkcR7-RsxW_d838cw">喜欢的歌</a></li>
-                <li><a href="https://blog.niekun.net/start-page.html">关于我</a></li>
+                <li><a href="https://blog.niekun.net/">我的博客<span class="underline"></span></a></li>
+                <li><a href="https://niekun.net/resume">我的简历<span class="underline"></span></a></li>
+                <li><a href="https://github.com/nie11kun">我的代码<span class="underline"></span></a></li>
+                <li><a href="https://niekun.net/cloud/">我的云盘<span class="underline"></span></a></li>
+                <li><a href="https://open.spotify.com/playlist/37i9dQZF1EtoJ3aX8fNvC0?si=oWVOxAkcR7-RsxW_d838cw">喜欢的歌<span class="underline"></span></a></li>
+                <li><a href="https://blog.niekun.net/start-page.html">关于我<span class="underline"></span></a></li>
             </ul>
         </nav>
     </main>
@@ -92,14 +92,10 @@
             function setActiveLink(link) {
                 if (currentActiveLink !== link) {
                     if (currentActiveLink) {
-                        currentActiveLink.style.color = '';
-                        currentActiveLink.style.setProperty('--line-width', '0');
-                        currentActiveLink.style.setProperty('--line-left', '50%');
+                        currentActiveLink.classList.remove('touch-active');
                     }
                     if (link) {
-                        link.style.color = '#e8e8ec';
-                        link.style.setProperty('--line-width', '100%');
-                        link.style.setProperty('--line-left', '0');
+                        link.classList.add('touch-active');
                     }
                     currentActiveLink = link;
                 }
