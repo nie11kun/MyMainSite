@@ -92,10 +92,20 @@
             function setActiveLink(link) {
                 if (currentActiveLink !== link) {
                     if (currentActiveLink) {
-                        currentActiveLink.classList.remove('touch-active');
+                        currentActiveLink.style.color = '';
+                        var underline = currentActiveLink.querySelector('.underline');
+                        if (underline) {
+                            underline.style.width = '0';
+                            underline.style.left = '50%';
+                        }
                     }
                     if (link) {
-                        link.classList.add('touch-active');
+                        link.style.color = '#e8e8ec';
+                        var underline = link.querySelector('.underline');
+                        if (underline) {
+                            underline.style.width = '100%';
+                            underline.style.left = '0';
+                        }
                     }
                     currentActiveLink = link;
                 }
