@@ -22,12 +22,12 @@
         <hr class="divider">
         <nav aria-label="主导航">
             <ul>
-                <li><a href="https://blog.niekun.net/">我的博客<span class="underline"></span></a></li>
-                <li><a href="https://niekun.net/resume">我的简历<span class="underline"></span></a></li>
-                <li><a href="https://github.com/nie11kun">我的代码<span class="underline"></span></a></li>
-                <li><a href="https://niekun.net/cloud/">我的云盘<span class="underline"></span></a></li>
-                <li><a href="https://open.spotify.com/playlist/37i9dQZF1EtoJ3aX8fNvC0?si=oWVOxAkcR7-RsxW_d838cw">喜欢的歌<span class="underline"></span></a></li>
-                <li><a href="https://blog.niekun.net/start-page.html">关于我<span class="underline"></span></a></li>
+                <li><a href="https://blog.niekun.net/">我的博客</a></li>
+                <li><a href="https://niekun.net/resume">我的简历</a></li>
+                <li><a href="https://github.com/nie11kun">我的代码</a></li>
+                <li><a href="https://niekun.net/cloud/">我的云盘</a></li>
+                <li><a href="https://open.spotify.com/playlist/37i9dQZF1EtoJ3aX8fNvC0?si=oWVOxAkcR7-RsxW_d838cw">喜欢的歌</a></li>
+                <li><a href="https://blog.niekun.net/start-page.html">关于我</a></li>
             </ul>
         </nav>
     </main>
@@ -93,17 +93,9 @@
                 if (currentActiveLink !== link) {
                     if (currentActiveLink) {
                         currentActiveLink.style.color = '';
-                        var underline = currentActiveLink.querySelector('.underline');
-                        if (underline) {
-                            underline.style.transform = 'scaleX(0) translateZ(0)';
-                        }
                     }
                     if (link) {
                         link.style.color = '#e8e8ec';
-                        var underline = link.querySelector('.underline');
-                        if (underline) {
-                            underline.style.transform = 'scaleX(1) translateZ(0)';
-                        }
                     }
                     currentActiveLink = link;
                 }

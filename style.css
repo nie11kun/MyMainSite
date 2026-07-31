@@ -186,25 +186,24 @@ nav a {
   -webkit-tap-highlight-color: transparent;
 }
 
-nav a .underline {
+nav a::after {
+  content: '';
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 100%;
+  left: 50%;
+  width: 0;
   height: 2px;
   background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-  transform: scaleX(0) translateZ(0);
-  transform-origin: center;
-  will-change: transform;
-  transition: transform var(--transition-fast);
+  transition: width var(--transition-fast), left var(--transition-fast);
 }
 
-nav a:hover, nav a:active, nav a.touch-active {
+nav a:hover, nav a:active {
   color: var(--text-primary);
 }
 
-nav a:hover .underline, nav a:active .underline, nav a.touch-active .underline {
-  transform: scaleX(1) translateZ(0);
+nav a:hover::after, nav a:active::after {
+  width: 100%;
+  left: 0;
 }
 
 /* ===== Footer ===== */
