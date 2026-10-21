@@ -34,6 +34,18 @@ body {
   position: relative;
 }
 
+/* ===== ASCII Sharks Background ===== */
+#ascii-sharks {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+  font-family: var(--font-mono);
+}
+
 /* ===== Mouse Glow ===== */
 .glow {
   position: fixed;
@@ -89,6 +101,7 @@ main {
   letter-spacing: -0.03em;
   line-height: 1.1;
   color: var(--text-primary);
+  text-shadow: 0 4px 24px rgba(10, 10, 11, 0.95), 0 0 16px rgba(10, 10, 11, 0.9);
 }
 
 .name .letter {
@@ -114,6 +127,7 @@ main {
   opacity: 0;
   animation: fadeIn 1s ease 1.2s forwards;
   position: relative;
+  text-shadow: 0 2px 10px rgba(10, 10, 11, 0.95);
 }
 
 .subtitle::after {
@@ -176,7 +190,7 @@ nav ul {
 
 nav a {
   display: inline-block;
-  color: var(--text-secondary);
+  color: #93939f;
   text-decoration: none;
   font-size: clamp(1.8rem, 3vw, 2rem);
   font-weight: 500;
@@ -184,6 +198,7 @@ nav a {
   position: relative;
   transition: color var(--transition-fast);
   -webkit-tap-highlight-color: transparent;
+  text-shadow: 0 2px 14px rgba(10, 10, 11, 0.95), 0 0 8px rgba(10, 10, 11, 0.9);
 }
 
 nav a::after {
@@ -224,6 +239,7 @@ footer p {
   color: var(--text-muted);
   letter-spacing: 0.05em;
   font-weight: 400;
+  text-shadow: 0 2px 8px rgba(10, 10, 11, 0.95);
 }
 
 /* ===== Responsive ===== */
