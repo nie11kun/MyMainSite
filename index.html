@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Marco Nie</title>
     <meta name="description" content="Marco Nie — 个人主页。博客、代码、简历与更多。">
     <meta name="theme-color" content="#0a0a0b">
@@ -19,48 +19,99 @@
     <!-- Mouse tracking glow -->
     <div class="glow" id="glow" aria-hidden="true"></div>
 
+    <!-- Readability scrim behind the centre stack -->
+    <div class="scrim" aria-hidden="true"></div>
+
+    <!-- Sonar HUD frame -->
+    <div class="frame" aria-hidden="true">
+        <span class="bracket tl"></span><span class="bracket tr"></span>
+        <span class="bracket bl"></span><span class="bracket br"></span>
+    </div>
+
+    <header class="corner corner-tl">
+        <span class="mark">✦</span> niekun.net
+    </header>
+    <div class="corner corner-tr" aria-hidden="true">
+        <span class="live-dot"></span><span id="clock">上海 --:--:--</span>
+    </div>
+    <div class="corner corner-bl" aria-hidden="true">
+        <span>FISH <b id="hud-fish">---</b></span>
+        <span class="sep">/</span>
+        <span>SHARKS <b id="hud-sharks">--</b></span>
+        <span class="sep hud-wide">/</span>
+        <span class="hud-wide">CURRENT <b id="hud-current">-.--</b> kn</span>
+    </div>
+
     <main>
-        <h1 class="name" id="name" aria-label="marco nie">marco nie</h1>
-        <p class="subtitle">I'm dancing at the feet of my lord...</p>
-        <hr class="divider">
+        <p class="eyebrow">// personal index · 个人主页</p>
+        <h1 class="name" id="name" aria-label="marco nie">
+            <span class="word">marco</span> <span class="word dim">nie</span>
+        </h1>
+        <p class="subtitle"><span id="typed">I'm dancing at the feet of my lord…</span><span class="cursor" aria-hidden="true"></span></p>
+
         <nav aria-label="主导航">
             <ul>
-                <li><a href="https://blog.niekun.net/">我的博客</a></li>
-                <li><a href="https://niekun.net/resume">我的简历</a></li>
-                <li><a href="https://github.com/nie11kun">我的代码</a></li>
-                <li><a href="https://niekun.net/cloud/">我的云盘</a></li>
-                <li><a href="https://open.spotify.com/playlist/37i9dQZF1EtoJ3aX8fNvC0?si=oWVOxAkcR7-RsxW_d838cw">喜欢的歌</a></li>
-                <li><a href="https://blog.niekun.net/start-page.html">关于我</a></li>
+                <li><a href="https://blog.niekun.net/"><span class="idx">01</span><span class="label">博客</span><span class="en">Journal</span><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 10.5 10.5 3.5M5 3.5h5.5V9" /></svg></a></li>
+                <li><a href="https://niekun.net/resume"><span class="idx">02</span><span class="label">简历</span><span class="en">Resume</span><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 10.5 10.5 3.5M5 3.5h5.5V9" /></svg></a></li>
+                <li><a href="https://github.com/nie11kun"><span class="idx">03</span><span class="label">代码</span><span class="en">Code</span><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 10.5 10.5 3.5M5 3.5h5.5V9" /></svg></a></li>
+                <li><a href="https://niekun.net/cloud/"><span class="idx">04</span><span class="label">云盘</span><span class="en">Cloud</span><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 10.5 10.5 3.5M5 3.5h5.5V9" /></svg></a></li>
+                <li><a href="https://open.spotify.com/playlist/37i9dQZF1EtoJ3aX8fNvC0?si=oWVOxAkcR7-RsxW_d838cw"><span class="idx">05</span><span class="label">歌单</span><span class="en">Playlist</span><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 10.5 10.5 3.5M5 3.5h5.5V9" /></svg></a></li>
+                <li><a href="https://blog.niekun.net/start-page.html"><span class="idx">06</span><span class="label">关于</span><span class="en">About</span><svg class="arrow" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 10.5 10.5 3.5M5 3.5h5.5V9" /></svg></a></li>
             </ul>
         </nav>
     </main>
 
-    <footer>
-        <p>© Marco Nie</p>
+    <footer class="corner corner-br">
+        <p>© <span id="year">2026</span> Marco Nie</p>
     </footer>
 
     <script>
-        // Letter-by-letter entrance animation
-        (function () {
-            const nameEl = document.getElementById('name');
-            const text = nameEl.textContent;
-            nameEl.innerHTML = '';
-            nameEl.setAttribute('aria-label', text);
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            let delay = 0;
-            for (let i = 0; i < text.length; i++) {
-                const span = document.createElement('span');
-                if (text[i] === ' ') {
-                    span.innerHTML = '&nbsp;';
-                    span.style.width = '0.3em';
-                } else {
-                    span.textContent = text[i];
-                    span.classList.add('letter');
-                    span.style.animationDelay = `${delay * 80 + 200}ms`;
+        // Masked letter-by-letter entrance for the name
+        (function () {
+            var words = document.querySelectorAll('#name .word');
+            var delay = 0;
+            for (var w = 0; w < words.length; w++) {
+                var text = words[w].textContent;
+                words[w].textContent = '';
+                for (var i = 0; i < text.length; i++) {
+                    var mask = document.createElement('span');
+                    mask.className = 'mask';
+                    var letter = document.createElement('span');
+                    letter.className = 'letter';
+                    letter.textContent = text[i];
+                    letter.style.animationDelay = (350 + delay * 35) + 'ms';
+                    mask.appendChild(letter);
+                    words[w].appendChild(mask);
                     delay++;
                 }
-                nameEl.appendChild(span);
             }
+        })();
+
+        // Typewriter subtitle (text stays in the HTML if this never runs)
+        (function () {
+            if (reduceMotion) return;
+            var el = document.getElementById('typed');
+            var text = el.textContent;
+            el.textContent = '';
+            var i = 0;
+            setTimeout(function tick() {
+                el.textContent = text.slice(0, ++i);
+                if (i < text.length) setTimeout(tick, 30);
+            }, 900);
+        })();
+
+        // Live Shanghai clock + year
+        (function () {
+            var clock = document.getElementById('clock');
+            var fmt = new Intl.DateTimeFormat('zh-CN', {
+                timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            });
+            function update() { clock.textContent = '上海 ' + fmt.format(new Date()); }
+            update();
+            setInterval(update, 1000);
+            document.getElementById('year').textContent = new Date().getFullYear();
         })();
 
         // Interactive Effects (Glow + Touch Hover)
@@ -84,24 +135,55 @@
             function findLinkAt(x, y) {
                 for (var i = 0; i < navLinks.length; i++) {
                     var rect = navLinks[i].getBoundingClientRect();
-                    if (x >= rect.left - 20 && x <= rect.right + 20 &&
-                        y >= rect.top - 10 && y <= rect.bottom + 10) {
+                    if (x >= rect.left && x <= rect.right &&
+                        y >= rect.top && y <= rect.bottom) {
                         return navLinks[i];
                     }
                 }
                 return null;
             }
 
+            // iOS Safari ignores class changes during passive touchmove, so the
+            // active state is written as inline styles on the link's parts
+            function paint(link, on) {
+                link.querySelector('.label').style.color = on ? '#e8e8ec' : '';
+                var arrow = link.querySelector('.arrow');
+                arrow.style.color = on ? '#64d8cb' : '';
+                arrow.style.transform = on ? 'rotate(0deg)' : '';
+            }
+
+            // Sonar ping: two rings from the link's arrow + a splash in the ocean
+            function ping(link) {
+                if (reduceMotion) return;
+                var r = link.querySelector('.arrow').getBoundingClientRect();
+                var x = r.left + r.width / 2;
+                var y = r.top + r.height / 2;
+                ['ping', 'ping late'].forEach(function (cls) {
+                    var ring = document.createElement('div');
+                    ring.className = cls;
+                    ring.style.left = x + 'px';
+                    ring.style.top = y + 'px';
+                    ring.addEventListener('animationend', function () { ring.remove(); });
+                    document.body.appendChild(ring);
+                });
+                var engine = window.__oceanEngine;
+                if (engine) engine.world.splash(x, y);
+            }
+
             function setActiveLink(link) {
                 if (currentActiveLink !== link) {
-                    if (currentActiveLink) {
-                        currentActiveLink.style.color = '';
-                    }
+                    if (currentActiveLink) paint(currentActiveLink, false);
                     if (link) {
-                        link.style.color = '#e8e8ec';
+                        paint(link, true);
+                        ping(link);
                     }
                     currentActiveLink = link;
                 }
+            }
+
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].addEventListener('mouseenter', function () { ping(this); });
+                navLinks[i].addEventListener('focus', function () { ping(this); });
             }
 
             // ---- Mouse (desktop) ----
@@ -162,6 +244,28 @@
         })();
     </script>
     <script type="module" src="ascii-sharks.js"></script>
+    <script type="module">
+        // Sonar readout: live numbers from the ocean simulation
+        import { current } from './ascii-sharks.js';
+
+        const fishEl = document.getElementById('hud-fish');
+        const sharksEl = document.getElementById('hud-sharks');
+        const currentEl = document.getElementById('hud-current');
+        const v = { x: 0, y: 0 };
+        const pad = (n, w) => String(n).padStart(w, '0');
+
+        function update() {
+            const world = window.__oceanEngine?.world;
+            if (!world || !world.width) return;
+            fishEl.textContent = pad(world.fish.length, 3);
+            sharksEl.textContent = pad(world.sharks.length, 2);
+            current(world.width / 2, world.height / 2, world.time, v);
+            // px/s -> a plausible knot figure for the readout
+            currentEl.textContent = (Math.hypot(v.x, v.y) / 40).toFixed(2);
+        }
+        window.addEventListener('DOMContentLoaded', () => setTimeout(update, 0));
+        setInterval(update, 500);
+    </script>
 </body>
 
 </html>
